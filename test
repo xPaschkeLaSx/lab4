@@ -1,0 +1,123 @@
+#include <cstdio>
+#include <iostream>
+#include <string>
+#include <fstream>
+#include <stdlib.h> 
+#include <time.h>   
+#include <limits>
+using namespace std;
+#include "../.../'header_file'"
+
+int main()
+{
+  int n, m;
+  srand(time(NULL));
+  
+  cout << "\nPodaj wymiar macierzy kwadratowej:\n";
+  cin >> n;
+
+  while (1)
+  {
+    if (cin.fail())
+    {
+      cin.clear();
+      cin.ignore(numeric_limits<streamsize>::max(), '\n');
+      cout << "Bledne dane " << endl;
+      cin >> n;
+    }
+    if (!cin.fail())
+      break;
+  }
+  //n = 4;
+  //drugi konstruktor z zadania
+  Matrix matrix1(n);
+  //metoda rows()
+  cout << "Wymiar 1st macierz (kwadratowej, metoda rows()):\n"
+       << matrix1.rows() << "\nMetoda print:\n";
+  //metoda print()
+  matrix1.print();
+
+  /*
+  srand(time(NULL));
+  n = rand() % 6 + 4;
+  m = rand() % 6 + 4;
+  */
+  cout << "Podaj wymiary kolejnej macierzy:\n";
+  cin >> n >> m;
+  while (1)
+  {
+    if (cin.fail())
+    {
+      cin.clear();
+      cin.ignore(numeric_limits<streamsize>::max(), '\n');
+      cout << "Bledne dane " << endl;
+      cin >> n >> m;
+    }
+    if (!cin.fail())
+      break;
+  }
+  //pierwszy konstruktor z zadania
+  Matrix matrix2(n, m);
+  //metody rows() oraz cols()
+  cout << "\n\nWymiary 2nd macierz (metody rows() i cols()):\n"
+       << matrix2.rows() << " " << matrix2.cols() << "\n";
+  matrix2.print();
+
+  string file_name, full_path;
+  cout << "\n\nDo utworzenia trzeciej macierzy podaj bezwzględna ścieżke do folderu z plikiem\n\nŚcieżka do pliku:\n";
+  //cin >> full_path;
+  cin.ignore();
+  getline(cin, full_path);
+  cout << "\nA teraz nazwa pliku (z rozszerzeniem):" << endl;
+  getline(cin, file_name);
+  //cin >> file_name;
+  //trzeci konstruktor z zadania
+  Matrix matrix3(file_name, full_path);
+  matrix3.print();
+
+  //losowanie do macierzy
+  cout << "\n\nMacierz pierwsza i druga po wylosowaniu do nich liczb (uzupełniane metodą set()):\n";
+
+  //metoda set()
+  matrix1.fill();
+
+  matrix1.print();
+  cout << "\n\nMacierz druga wypisana z użyciem metody get():\n";
+  matrix2.fill();
+  for (int i = 0; i < matrix2.rows(); i++)
+  {
+    for (int j = 0; j < matrix2.cols(); j++)
+    {
+
+      //metoda get()
+      cout << matrix2.get(i, j) << "\t";
+    }
+    cout << "\n";
+  }
+
+  //Matrix matrix1_copy = matrix1;
+  //cout << "\nTrzecia is copy of 1st\n";
+  //matrix1_copy.print();
+
+  Matrix matrix_multiply_test = matrix1.multiply(matrix2);
+  cout << "\nMacierz powstała z pomnożenia pierwszej przez drugą:\n";
+  matrix_multiply_test.print();
+
+  cout << "\nTeraz przedstawimy macierz powstałą z dodania macierzy pierwszej do drugiej:\n";
+  Matrix matrix_add_test = matrix1.add(matrix2);
+  matrix_add_test.print();
+
+  cout << "\nOdejmiemy od macierzy przedostatniej ostatnią:\n";
+  Matrix matrix_subtract_test = matrix_multiply_test.subtract(matrix_add_test);
+  matrix_subtract_test.print();
+
+  cout << "\nA teraz zapiszemy ostatnią macierz do pliku, podaj ścieżke do folderu,:\n";
+  //cin >> full_path;
+  getline(cin, full_path);
+  cout << "\nA teraz nazwa pliku (z rozszerzeniem):\n";
+  //cin >> file_name;
+  getline(cin, file_name);
+  matrix_subtract_test.store(file_name, full_path);
+
+  return 0;
+}
